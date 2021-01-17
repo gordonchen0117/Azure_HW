@@ -25,6 +25,10 @@ from PIL import Image, ImageDraw, ImageFont
 import time
 
 app = Flask(__name__)
+LINE_SECRET = "9a537d5f547fb650aca2523abed118c1"
+LINE_TOKEN = "BFBQPH4rKRbBlITk3WpcqIp5wi8g8mzemzs5lnC6dBSzKuTOYF4nhBu6tsVPAw11xfAlI7bjzeFUofVXH3pzNtQP/bvcxve4GRJVl3W72OqXRhhbjQEX3ndnhj5a09VV3j27WcZPRyE6jQZdDq6BuQdB04t89/1O/w1cDnyilFU="
+LINE_BOT = LineBotApi(LINE_TOKEN)
+HANDLER = WebhookHandler(LINE_SECRET)
 
 
 # CONFIG = json.load(open("/home/config.json", "r"))
@@ -232,7 +236,19 @@ def hello():
 
 
 
-
+@app.route("/callback", methods=["POST"])
+def callback():
+    # X-Line-Signature: 數位簽章
+    signature = request.headers["X-Line-Signature"]
+    print(signature)
+    body = request.get_data(as_text=True)
+    print(body)
+    try:
+        HANDLER.handle(body, signature)
+    except InvalidSignatureError:
+        print("Check the channel secret/access token.")
+        abort(400)
+    return "OK"
 
 
 
