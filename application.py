@@ -50,10 +50,10 @@ app = Flask(__name__)
 # IMGUR_CLIENT = Imgur(config=IMGUR_CONFIG)
 
 
-# @app.route("/")
-# def hello():
-#     "hello world"
-#     return "Hello World!!!!!"
+@app.route("/")
+def hello():
+    "hello world"
+    return "Hello World!!!!!"
 
 
 # def azure_describe(url):
@@ -237,49 +237,49 @@ app = Flask(__name__)
 
 
 
-from flask import Flask, request
+# from flask import Flask, request
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
-@app.route('/hello/Gordon')
-def hello() :
-    return 'Hello Gordon!'
-@app.route('/hello/Maggie')
-def hello2() :
-    return 'Hello Maggie!'
+# @app.route('/hello/Gordon')
+# def hello() :
+#     return 'Hello Gordon!'
+# @app.route('/hello/Maggie')
+# def hello2() :
+#     return 'Hello Maggie!'
 
-@app.route('/hello/<username>')
-def hello_username(username) :
-    return 'Hello %s !'%(username)
+# @app.route('/hello/<username>')
+# def hello_username(username) :
+#     return 'Hello %s !'%(username)
 
-@app.route('/hello/<username>/<age>')
-def hello_username_age(username, age) :
-    outstr = 'Hello %s , you are %s year old !' %(username, age)
-    return outstr
+# @app.route('/hello/<username>/<age>')
+# def hello_username_age(username, age) :
+#     outstr = 'Hello %s , you are %s year old !' %(username, age)
+#     return outstr
 
-@app.route('/query/<username>/<age>')
-def query(username, age) :
-    outstr = """Select * from db where username = '%s' and age = %s ;""" %(username, age)
-    return outstr
+# @app.route('/query/<username>/<age>')
+# def query(username, age) :
+#     outstr = """Select * from db where username = '%s' and age = %s ;""" %(username, age)
+#     return outstr
 
-@app.route('/query')
-def query_par() :
-    username = request.args.get('username')
-    age = request.args.get('age')
-    if username == None :
-        return '<h1>What your name?</h1>'
-    if age == None :
-        outStr = '<h1>Hello %s !</h1>'%(username)
-        return outStr
-    outStr = '<h1>Hello %s , you are %s year old !</h1>' %(username, age)
-    return outStr
+# @app.route('/query')
+# def query_par() :
+#     username = request.args.get('username')
+#     age = request.args.get('age')
+#     if username == None :
+#         return '<h1>What your name?</h1>'
+#     if age == None :
+#         outStr = '<h1>Hello %s !</h1>'%(username)
+#         return outStr
+#     outStr = '<h1>Hello %s , you are %s year old !</h1>' %(username, age)
+#     return outStr
 
-@app.route('/add')
-def add():
-    x = request.args.get('x')
-    y = request.args.get('y')
-    return str(int(x) + int(y))
+# @app.route('/add')
+# def add():
+#     x = request.args.get('x')
+#     y = request.args.get('y')
+#     return str(int(x) + int(y))
 
-if __name__ == '__main__' :
-    app.run(host='0.0.0.0', port=5000)
+# if __name__ == '__main__' :
+#     app.run(host='0.0.0.0', port=5000)
 
