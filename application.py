@@ -234,7 +234,7 @@ HANDLER = WebhookHandler(LINE_SECRET)
     #     event.reply_token, [FlexSendMessage(alt_text="Report", contents=bubble)]
     # )
 
-
+import random
 
 @app.route("/callback", methods=["POST"])
 def callback():
@@ -260,7 +260,9 @@ def handle_message(event):
         url = url_dict[event.message.text.upper()]
         message = TextSendMessage(text=url)
     except:
-        message = TextSendMessage(text=event.message.text)
+        # message = TextSendMessage(text=event.message.text)
+        random_text = random.choice('LMH')
+        message = TextSendMessage(text=random_text)
 # 回覆訊息
     LINE_BOT.reply_message(event.reply_token, message)
 
