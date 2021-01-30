@@ -25,6 +25,7 @@ from PIL import Image, ImageDraw, ImageFont
 import time
 
 app = Flask(__name__)
+
 LINE_SECRET = "9a537d5f547fb650aca2523abed118c1"
 LINE_TOKEN = "BFBQPH4rKRbBlITk3WpcqIp5wi8g8mzemzs5lnC6dBSzKuTOYF4nhBu6tsVPAw11xfAlI7bjzeFUofVXH3pzNtQP/bvcxve4GRJVl3W72OqXRhhbjQEX3ndnhj5a09VV3j27WcZPRyE6jQZdDq6BuQdB04t89/1O/w1cDnyilFU="
 LINE_BOT = LineBotApi(LINE_TOKEN)
@@ -311,6 +312,6 @@ def handle_content_message(event):
 #     y = request.args.get('y')
 #     return str(int(x) + int(y))
 
-if __name__ == '__main__' :
-    app.run(host='0.0.0.0', port=5000)
-    HANDLER.run(host='0.0.0.0', port=5000)
+# if __name__ == '__main__' :
+#     app.run(host='0.0.0.0', port=5000)
+#  
