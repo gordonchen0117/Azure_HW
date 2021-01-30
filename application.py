@@ -44,10 +44,10 @@ FACE_KEY = CONFIG["azure"]["face_key"]
 FACE_END = CONFIG["azure"]["face_end"]
 FACE_CLIENT = FaceClient(FACE_END, CognitiveServicesCredentials(FACE_KEY))
 
-PERSON_GROUP_ID_list = [gordon111111111,snak1]
-for i in PERSON_GROUP_ID_list :
-	PERSON_GROUP_ID = i
-# PERSON_GROUP_ID = "gordon111111111"
+# PERSON_GROUP_ID_list = [gordon111111111,snak1]
+# for i in PERSON_GROUP_ID_list :
+# 	PERSON_GROUP_ID = i
+PERSON_GROUP_ID = "gordon111111111"
 
 LINE_SECRET = CONFIG["line"]["line_secret"]
 LINE_TOKEN = CONFIG["line"]["line_token"]
