@@ -234,37 +234,37 @@ HANDLER = WebhookHandler(LINE_SECRET)
     #     event.reply_token, [FlexSendMessage(alt_text="Report", contents=bubble)]
     # )
 
-import random
+# import random
 
-@app.route("/callback", methods=["POST"])
-def callback():
-    # X-Line-Signature: 數位簽章
-    signature = request.headers["X-Line-Signature"]
-    print(signature)
-    body = request.get_data(as_text=True)
-    print(body)
-    try:
-        HANDLER.handle(body, signature)
-    except InvalidSignatureError:
-        print("Check the channel secret/access token.")
-        abort(400)
-    return "OK"
+# @app.route("/callback", methods=["POST"])
+# def callback():
+#     # X-Line-Signature: 數位簽章
+#     signature = request.headers["X-Line-Signature"]
+#     print(signature)
+#     body = request.get_data(as_text=True)
+#     print(body)
+#     try:
+#         HANDLER.handle(body, signature)
+#     except InvalidSignatureError:
+#         print("Check the channel secret/access token.")
+#         abort(400)
+#     return "OK"
     
-@HANDLER.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    url_dict = {
-      "TIBAME":"https://www.tibame.com/coursegoodjob/traffic_cli", 
-      "HELP":"https://developers.line.biz/zh-hant/docs/messaging-api/"}
-# 將要發出去的文字變成TextSendMessage
-    try:
-        url = url_dict[event.message.text.upper()]
-        message = TextSendMessage(text=url)
-    except:
-        # message = TextSendMessage(text=event.message.text)
-        random_text = random.choice('LMH')
-        message = TextSendMessage(text=random_text)
-# 回覆訊息
-    LINE_BOT.reply_message(event.reply_token, message)
+# @HANDLER.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     url_dict = {
+#       "TIBAME":"https://www.tibame.com/coursegoodjob/traffic_cli", 
+#       "HELP":"https://developers.line.biz/zh-hant/docs/messaging-api/"}
+# # 將要發出去的文字變成TextSendMessage
+#     try:
+#         url = url_dict[event.message.text.upper()]
+#         message = TextSendMessage(text=url)
+#     except:
+#         # message = TextSendMessage(text=event.message.text)
+#         random_text = random.choice('LMH')
+#         message = TextSendMessage(text=random_text)
+# # 回覆訊息
+#     LINE_BOT.reply_message(event.reply_token, message)
 
 
 
@@ -314,3 +314,41 @@ def handle_message(event):
 # if __name__ == '__main__' :
 #     app.run(host='0.0.0.0', port=5000)
 
+@HANDLER.add(MessageEvent, message=ImageMessage)
+def handle_content_message(event):
+    # 先把傳來的照片存檔
+    filename = "{}.jpg".format(event.message.id)
+    message_content = LINE_BOT.get_message_content(
+      event.message.id)
+    with open(filename, "wb") as f_w:
+        for chunk in message_content.iter_content():
+            f_w.write(chunk)
+    f_w.close()
+
+    # 將取得照片的網路連結
+    image = IMGUR_CLIENT.image_upload(filename, "", "")
+    link = image["response"]["data"]["link"]
+        name = azure_face_recognition(filename)
+    if name != "": # 如果只有一張人臉，輸出人臉辨識結果
+        now = datetime.now(timezone(timedelta(hours=8))).\
+        strftime("%Y-%m-%d %H:%M") # 注意時區
+        output = "{0}, {1}".format(name, now)
+    else:
+        plate = azure_ocr(link)
+        link_ob = azure_object_detection(link, filename)
+        # 有車牌就輸出車牌
+        if len(plate) > 0:
+            output = "License Plate: {}".format(plate)
+        # 沒有車牌就就輸出影像描述的結果
+        else:
+            output = azure_describe(link)
+        link = link_ob
+            with open("templates/detect_result.json", "r") as f_r:
+        bubble = json.load(f_r)
+    f_r.close()
+    bubble["body"]["contents"][0]["contents"][0]["contents"][0]["text"] = output
+    bubble["header"]["contents"][0]["contents"][0]["contents"][0]["url"] = link
+    LINE_BOT.reply_message(
+        event.reply_token, 
+        [FlexSendMessage(alt_text="Report", contents=bubble)]
+    )
